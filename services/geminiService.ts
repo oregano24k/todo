@@ -15,7 +15,7 @@ const fileToGenerativePart = async (file: File) => {
 
 export const analyzeFoodImage = async (imageFile: File): Promise<AnalysisResult> => {
   if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set");
+    throw new Error("MISSING_API_KEY");
   }
 
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });

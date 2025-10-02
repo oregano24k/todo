@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { Header } from './components/Header';
 import { ImageUploader } from './components/ImageUploader';
@@ -49,7 +50,11 @@ const App: React.FC = () => {
       setAnalysisResult(result);
     } catch (err) {
       console.error("Analysis failed:", err);
-      setError("No se pudo analizar la imagen. Por favor, inténtalo de nuevo con una imagen más clara o diferente.");
+      if (err instanceof Error && err.message === 'MISSING_API_KEY') {
+        setError("Error de configuración: La clave API de Google no está configurada. Debes añadirla como una variable de entorno en tu servicio de hosting (ej. Netlify).");
+      } else {
+        setError("No se pudo analizar la imagen. Por favor, inténtalo de nuevo con una imagen más clara o diferente.");
+      }
     } finally {
       setIsLoading(false);
     }
