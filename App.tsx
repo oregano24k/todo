@@ -6,7 +6,7 @@ import { CalorieResults } from './components/CalorieResults';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { WelcomeMessage } from './components/WelcomeMessage';
 import { ErrorDisplay } from './components/ErrorDisplay';
-import { ApiKeyError } from './components/ApiKeyError';
+import { ApiKeyPrompt } from './components/ApiKeyPrompt';
 import { analyzeFoodImage } from './services/geminiService';
 import type { AnalysisResult } from './types';
 
@@ -19,6 +19,7 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [apiStatus, setApiStatus] = useState<ApiStatus>('idle');
+  const [apiKey, setApiKey] = useState<string>('');
 
   const handleImageUpload = (file: File) => {
     setImageFile(file);
@@ -44,13 +45,17 @@ const App: React.FC = () => {
       setError("Por favor, sube una imagen primero.");
       return;
     }
+    if (!apiKey) {
+      setError("API_KEY_MISSING");
+      return;
+    }
 
     setIsLoading(true);
     setError(null);
     setAnalysisResult(null);
 
     try {
-      const result = await analyzeFoodImage(imageFile);
+      const result = await analyzeFoodImage(imageFile, apiKey);
       setAnalysisResult(result);
       setApiStatus('connected');
     } catch (err) {
@@ -60,7 +65,10 @@ const App: React.FC = () => {
         if (err.message === 'MISSING_API_KEY') {
           setError("API_KEY_MISSING");
         } else if (err.message === 'BILLING_REQUIRED') {
-          setError("Error de API: Tu proyecto de Google Cloud requiere que se configure la facturación para usar la API. Por favor, haz clic en 'Configurar la facturación' en tu panel de Google AI Studio.");
+          setError("Error de API: Tu proyecto de Google Cloud requiere que se configure la facturación para usar la API.");
+        } else if (err.message === 'INVALID_API_KEY') {
+          setError("La clave API proporcionada no es válida. Por favor, revísala e inténtalo de nuevo.");
+          setApiKey(''); // Borra la clave inválida
         }
         else {
           setError("No se pudo analizar la imagen. Por favor, inténtalo de nuevo con una imagen más clara o diferente.");
@@ -71,7 +79,12 @@ const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [imageFile]);
+  }, [imageFile, apiKey]);
+
+  const handleSaveApiKey = (newKey: string) => {
+    setApiKey(newKey);
+    setError(null); // Borra el error para ocultar el prompt
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -88,7 +101,7 @@ const App: React.FC = () => {
             />
           )}
 
-          {error === 'API_KEY_MISSING' && <ApiKeyError />}
+          {error === 'API_KEY_MISSING' && <ApiKeyPrompt onSave={handleSaveApiKey} />}
           {error && error !== 'API_KEY_MISSING' && <ErrorDisplay message={error} />}
 
 
