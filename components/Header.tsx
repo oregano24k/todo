@@ -3,7 +3,7 @@ import React from 'react';
 import { ApiStatusIndicator } from './ApiStatusIndicator';
 
 interface HeaderProps {
-  apiStatus: boolean;
+  apiStatus: 'idle' | 'connected' | 'disconnected';
 }
 
 const LeafIcon = () => (
@@ -25,7 +25,7 @@ export const Header: React.FC<HeaderProps> = ({ apiStatus }) => {
             Calorie Vision <span className="text-emerald-500">AI</span>
           </h1>
         </div>
-        <ApiStatusIndicator isConnected={apiStatus} />
+        <ApiStatusIndicator status={apiStatus} />
       </div>
     </header>
   );
