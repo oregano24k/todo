@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 
 interface ImageUploaderProps {
@@ -60,23 +59,28 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload, onA
       )}
 
       {imageUrl && (
-        <div className="w-full flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6">
-          <button
-            onClick={onAnalyze}
-            disabled={isLoading}
-            className="w-full md:w-auto flex items-center justify-center px-6 py-4 text-lg font-semibold text-white bg-blue-500 rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out disabled:bg-slate-400 disabled:cursor-not-allowed"
-          >
-            <AnalyzeIcon />
-            {isLoading ? 'Analizando...' : 'Analizar Comida'}
-          </button>
-           <button
-            onClick={onReset}
-            disabled={isLoading}
-            className="w-full md:w-auto flex items-center justify-center px-6 py-4 text-lg font-semibold text-slate-700 bg-slate-200 rounded-xl hover:bg-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-300 transition-all duration-300 ease-in-out disabled:bg-slate-400 disabled:cursor-not-allowed"
-          >
-            <ResetIcon />
-            Elegir otra imagen
-          </button>
+        <div className="w-full flex flex-col items-center animate-fade-in">
+          <div className="w-full max-w-md mb-6">
+            <img src={imageUrl} alt="Vista previa de la comida" className="rounded-xl shadow-lg w-full h-auto object-contain max-h-80" />
+          </div>
+          <div className="w-full flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6">
+            <button
+              onClick={onAnalyze}
+              disabled={isLoading}
+              className="w-full md:w-auto flex items-center justify-center px-6 py-4 text-lg font-semibold text-white bg-blue-500 rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out disabled:bg-slate-400 disabled:cursor-not-allowed"
+            >
+              <AnalyzeIcon />
+              {isLoading ? 'Analizando...' : 'Analizar Comida'}
+            </button>
+            <button
+              onClick={onReset}
+              disabled={isLoading}
+              className="w-full md:w-auto flex items-center justify-center px-6 py-4 text-lg font-semibold text-slate-700 bg-slate-200 rounded-xl hover:bg-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-300 transition-all duration-300 ease-in-out disabled:bg-slate-400 disabled:cursor-not-allowed"
+            >
+              <ResetIcon />
+              Elegir otra imagen
+            </button>
+          </div>
         </div>
       )}
     </div>

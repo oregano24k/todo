@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { Header } from './components/Header';
 import { ImageUploader } from './components/ImageUploader';
@@ -61,13 +60,15 @@ const App: React.FC = () => {
       <Header />
       <main className="flex-grow container mx-auto p-4 md:p-8 flex flex-col items-center">
         <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg p-6 md:p-10 border border-slate-200">
-          <ImageUploader
-            onImageUpload={handleImageUpload}
-            onAnalyze={handleAnalyzeClick}
-            onReset={handleReset}
-            imageUrl={imageUrl}
-            isLoading={isLoading}
-          />
+          {!analysisResult && (
+            <ImageUploader
+              onImageUpload={handleImageUpload}
+              onAnalyze={handleAnalyzeClick}
+              onReset={handleReset}
+              imageUrl={imageUrl}
+              isLoading={isLoading}
+            />
+          )}
 
           {error && <ErrorDisplay message={error} />}
 
