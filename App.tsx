@@ -6,6 +6,7 @@ import { CalorieResults } from './components/CalorieResults';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { WelcomeMessage } from './components/WelcomeMessage';
 import { ErrorDisplay } from './components/ErrorDisplay';
+import { ApiKeyError } from './components/ApiKeyError';
 import { analyzeFoodImage } from './services/geminiService';
 import type { AnalysisResult } from './types';
 
@@ -57,7 +58,7 @@ const App: React.FC = () => {
       setApiStatus('disconnected');
       if (err instanceof Error) {
         if (err.message === 'MISSING_API_KEY') {
-          setError("Error de configuración: La clave API de Google no está configurada. Por favor, asegúrate de haberla añadido como una variable de entorno en tu servicio de hosting (ej. Netlify) y haber vuelto a desplegar el sitio.");
+          setError("API_KEY_MISSING");
         } else if (err.message === 'BILLING_REQUIRED') {
           setError("Error de API: Tu proyecto de Google Cloud requiere que se configure la facturación para usar la API. Por favor, haz clic en 'Configurar la facturación' en tu panel de Google AI Studio.");
         }
@@ -87,7 +88,9 @@ const App: React.FC = () => {
             />
           )}
 
-          {error && <ErrorDisplay message={error} />}
+          {error === 'API_KEY_MISSING' && <ApiKeyError />}
+          {error && error !== 'API_KEY_MISSING' && <ErrorDisplay message={error} />}
+
 
           {isLoading && <LoadingSpinner />}
           
