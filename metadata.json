@@ -1,0 +1,5 @@
+{
+  "name": "Calorie Vision AI",
+  "description": "An AI-powered application that analyzes images of food to estimate caloric and nutritional information. Simply upload a photo of your meal to get a detailed breakdown of its contents.",
+  "requestFramePermissions": []
+}
