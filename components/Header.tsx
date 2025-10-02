@@ -1,5 +1,10 @@
 
 import React from 'react';
+import { ApiStatusIndicator } from './ApiStatusIndicator';
+
+interface HeaderProps {
+  apiStatus: boolean;
+}
 
 const LeafIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-emerald-500">
@@ -10,14 +15,17 @@ const LeafIcon = () => (
 );
 
 
-export const Header: React.FC = () => {
+export const Header: React.FC<HeaderProps> = ({ apiStatus }) => {
   return (
     <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-10">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-center">
-        <LeafIcon />
-        <h1 className="text-2xl md:text-3xl font-bold text-slate-800 ml-2">
-          Calorie Vision <span className="text-emerald-500">AI</span>
-        </h1>
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="flex items-center">
+          <LeafIcon />
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-800 ml-2">
+            Calorie Vision <span className="text-emerald-500">AI</span>
+          </h1>
+        </div>
+        <ApiStatusIndicator isConnected={apiStatus} />
       </div>
     </header>
   );

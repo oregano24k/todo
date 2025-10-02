@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Header } from './components/Header';
 import { ImageUploader } from './components/ImageUploader';
 import { CalorieResults } from './components/CalorieResults';
@@ -15,6 +15,14 @@ const App: React.FC = () => {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [isApiConfigured, setIsApiConfigured] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Esta es una comprobación del lado del cliente.
+    // La comprobación real ocurre en el servicio, pero esto ayuda a la UI a reaccionar.
+    setIsApiConfigured(!!process.env.API_KEY);
+  }, []);
+
 
   const handleImageUpload = (file: File) => {
     setImageFile(file);
@@ -52,6 +60,7 @@ const App: React.FC = () => {
       console.error("Analysis failed:", err);
       if (err instanceof Error && err.message === 'MISSING_API_KEY') {
         setError("Error de configuración: La clave API de Google no está configurada. Debes añadirla como una variable de entorno en tu servicio de hosting (ej. Netlify).");
+        setIsApiConfigured(false);
       } else {
         setError("No se pudo analizar la imagen. Por favor, inténtalo de nuevo con una imagen más clara o diferente.");
       }
@@ -62,7 +71,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <Header apiStatus={isApiConfigured} />
       <main className="flex-grow container mx-auto p-4 md:p-8 flex flex-col items-center">
         <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg p-6 md:p-10 border border-slate-200">
           {!analysisResult && (
