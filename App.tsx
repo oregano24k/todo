@@ -55,10 +55,17 @@ const App: React.FC = () => {
     } catch (err) {
       console.error("Analysis failed:", err);
       setApiStatus('disconnected');
-      if (err instanceof Error && err.message === 'MISSING_API_KEY') {
-        setError("Error de configuración: La clave API de Google no está configurada. Por favor, asegúrate de haberla añadido como una variable de entorno en tu servicio de hosting (ej. Netlify) y haber vuelto a desplegar el sitio.");
+      if (err instanceof Error) {
+        if (err.message === 'MISSING_API_KEY') {
+          setError("Error de configuración: La clave API de Google no está configurada. Por favor, asegúrate de haberla añadido como una variable de entorno en tu servicio de hosting (ej. Netlify) y haber vuelto a desplegar el sitio.");
+        } else if (err.message === 'BILLING_REQUIRED') {
+          setError("Error de API: Tu proyecto de Google Cloud requiere que se configure la facturación para usar la API. Por favor, haz clic en 'Configurar la facturación' en tu panel de Google AI Studio.");
+        }
+        else {
+          setError("No se pudo analizar la imagen. Por favor, inténtalo de nuevo con una imagen más clara o diferente.");
+        }
       } else {
-        setError("No se pudo analizar la imagen. Por favor, inténtalo de nuevo con una imagen más clara o diferente.");
+        setError("Ocurrió un error inesperado. Por favor, inténtalo de nuevo.");
       }
     } finally {
       setIsLoading(false);

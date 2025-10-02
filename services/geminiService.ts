@@ -78,6 +78,9 @@ export const analyzeFoodImage = async (imageFile: File): Promise<AnalysisResult>
 
   } catch (error) {
     console.error("Error calling Gemini API:", error);
+    if (error instanceof Error && /billing|quota/i.test(error.message)) {
+      throw new Error("BILLING_REQUIRED");
+    }
     throw new Error("Failed to get a valid response from the AI model.");
   }
 };
