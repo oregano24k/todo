@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({ apiStatus }) => {
         <div className="flex items-center space-x-4">
           <ApiStatusIndicator status={apiStatus} />
           {/* Reemplaza este enlace con la URL de tu repositorio de GitHub */}
-          <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="group" aria-label="View source code on GitHub">
+          <a href="https://oregano24k.github.io/todo" target="_blank" rel="noopener noreferrer" className="group" aria-label="View source code on GitHub">
             <GitHubIcon />
           </a>
         </div>
